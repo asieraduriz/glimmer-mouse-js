@@ -1,0 +1,30 @@
+{
+  "name": "glimmer-mouse-js",
+  "description": "A small library to power-up mouse movements in web pages",
+  "private": false,
+  "version": "1.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "author": "Asier Aduriz <asieradurizs@gmail.com>",
+  "license": "MIT",
+  "main": "./dist/glimmer-mouse-js.umd.cjs",
+  "module": "./dist/glimmer-mouse-js.js",
+  "exports": {
+    ".": {
+      "import": "./dist/glimmer-mouse-js.js",
+      "require": "./dist/glimmer-mouse-js.umd.cjs"
+    }
+  },
+  "scripts": {
+    "build": "rimraf dist && tsc && vite build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.4",
+    "vite-plugin-dts": "^4.4.0"
+  }
+}
