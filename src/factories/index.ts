@@ -1,1 +1,0 @@
-export { SelectionFactory } from "./selection";

@@ -1,12 +1,5 @@
-export interface Position {
-  x: number;
-  y: number;
-}
-
-export type GlimmerMouseAnimations = { animation?: string } | { animations?: string[] };
 export type GlimmerMouseSelection = "random" | "sequential";
-
-export type GlimmerMouseConfigProp = Partial<GlimmerMouseConfig>;
+export type GlimmerMouseConfigArgs = Partial<GlimmerMouseConfig>;
 
 export type GlimmerMouseConfig = {
   container: HTMLElement | (Window & typeof globalThis);
