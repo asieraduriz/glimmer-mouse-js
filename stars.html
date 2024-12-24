@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimized Mouse Trail with Colors</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #111;
+        }
+
+        .trail {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.8;
+            pointer-events: none;
+            animation: trailEffect 0.5s forwards;
+        }
+
+        @keyframes trailEffect {
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        const trails = [];  // Pool of trail elements
+        const trailCount = 10;  // Number of trail elements to reuse
+
+        // Create trail elements in advance
+        for (let i = 0; i < trailCount; i++) {
+            const trail = document.createElement('div');
+            trail.classList.add('trail');
+            document.body.appendChild(trail);
+            trails.push(trail);
+        }
+
+        // Throttle the mousemove event to reduce the number of events handled
+        let lastTime = 0;
+        const throttleInterval = 16; // ~60fps
+
+        function handleMouseMove(e) {
+            const now = Date.now();
+            if (now - lastTime < throttleInterval) return;  // Throttle
+            lastTime = now;
+
+            const trail = trails.shift();  // Get the first available trail element
+            trail.style.left = `${e.pageX - 5}px`; // Center the trail element on the mouse
+            trail.style.top = `${e.pageY - 5}px`;
+
+            // Randomly change the color of the trail
+            trail.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+
+            // Push it to the end of the array to reuse it
+            trails.push(trail);
+
+            // Trigger the animation by resetting the CSS animation
+            trail.style.animation = 'none'; // Reset animation
+            void trail.offsetHeight; // Trigger reflow to restart animation
+            trail.style.animation = 'trailEffect 0.5s forwards';
+        }
+
+        // Use requestAnimationFrame to smooth updates
+        function animate() {
+            requestAnimationFrame(animate);
+            // Here we handle the mousemove event
+            document.addEventListener('mousemove', handleMouseMove);
+        }
+
+        animate();  // Start the animation loop
+    </script>
+</body>
+
+</html>

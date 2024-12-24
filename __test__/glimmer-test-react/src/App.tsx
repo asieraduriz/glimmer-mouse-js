@@ -1,15 +1,15 @@
 import "./App.css";
-import { glimmerMouse } from "./glimmer";
-import { glowMouse } from "./glimmer/glow";
-
+import { glowMouse } from "./presets";
+import { stars } from "./presets/stars";
 function App() {
   console.log("App rerendered");
-  const { onGlimmerMouseMove } = glimmerMouse({});
   const { onGlowMouseMove } = glowMouse();
+
+  const { onMouseMove } = stars({ animation: "idle" });
   return (
     <div
       onMouseMove={(event) => {
-        onGlimmerMouseMove(event.nativeEvent);
+        onMouseMove(event.nativeEvent);
         onGlowMouseMove(event.nativeEvent);
       }}
       style={{ height: "100dvh", width: "50dvw" }}

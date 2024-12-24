@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Morph to Checkmark</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+
+        .morph-button {
+            position: relative;
+            width: 150px;
+            height: 50px;
+            border: none;
+            background-color: #4caf50;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 25px;
+            overflow: hidden;
+            transition: width 0.3s ease, background-color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .morph-button .button-text {
+            transition: opacity 0.3s ease;
+        }
+
+        .morph-button .checkmark {
+            position: absolute;
+            width: 0;
+            height: 0;
+            opacity: 0;
+            stroke: white;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transform: scale(0);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .morph-button .checkmark-circle {
+            stroke-dasharray: 157;
+            stroke-dashoffset: 157;
+            transition: stroke-dashoffset 0.4s ease 0.3s;
+        }
+
+        .morph-button .checkmark-check {
+            stroke-dasharray: 50;
+            stroke-dashoffset: 50;
+            transition: stroke-dashoffset 0.2s ease 0.7s;
+        }
+
+        /* Trigger state */
+        .morph-button.morphed {
+            width: 50px;
+            background-color: #4caf50;
+        }
+
+        .morph-button.morphed .button-text {
+            opacity: 0;
+        }
+
+        .morph-button.morphed .checkmark {
+            width: 52px;
+            height: 52px;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .morph-button.morphed .checkmark-circle {
+            stroke-dashoffset: 0;
+        }
+
+        .morph-button.morphed .checkmark-check {
+            stroke-dashoffset: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="morph-button">
+        <span class="button-text">Submit</span>
+        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+            <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
+            <path class="checkmark-check" fill="none" d="M16 26l9 9 16-16" />
+        </svg>
+    </button>
+
+    <script>
+        const button = document.querySelector('.morph-button');
+
+        button.addEventListener('click', () => {
+            button.classList.add('morphed');
+        });
+    </script>
+
+</body>
+
+</html>

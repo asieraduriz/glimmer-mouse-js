@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            position: relative;
+            width: 500px;
+            height: 500px;
+        }
+
+        .button {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: #9333ea;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.5s ease;
+        }
+
+        .button.spin {
+            animation: spinOnce 1s ease-in-out;
+        }
+
+        .orbital-element {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px;
+            border-radius: 50%;
+            background: #fcd34d;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .orbit-path {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transform-origin: center;
+        }
+
+        @keyframes orbit {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        @keyframes spinOnce {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="container">
+        <button class="button" id="button"></button>
+    </div>
+
+    <script>
+        const container = document.getElementById('container');
+        const button = document.getElementById('button');
+        let isOrbiting = true;
+
+        // Configuration for orbital elements
+        const orbits = [
+            { radius: 100, duration: 8, color: '#fcd34d' },  // Gold star
+            { radius: 150, duration: 12, color: '#60a5fa' }, // Blue planet
+            { radius: 200, duration: 16, color: '#fcd34d' }, // Gold star
+            { radius: 250, duration: 20, color: '#60a5fa' }  // Blue planet
+        ];
+
+        // Track how many elements have converged
+        let convergenceCount = 0;
+
+        // Create orbital elements
+        orbits.forEach((config, index) => {
+            const orbitPath = document.createElement('div');
+            orbitPath.className = 'orbit-path';
+            orbitPath.style.width = `${config.radius * 2}px`;
+            orbitPath.style.height = `${config.radius * 2}px`;
+            orbitPath.style.animation = `orbit ${config.duration}s linear infinite`;
+
+            const element = document.createElement('div');
+            element.className = 'orbital-element';
+            element.style.left = '100%';
+            element.style.top = '50%';
+            element.style.background = config.color;
+
+            orbitPath.appendChild(element);
+            container.appendChild(orbitPath);
+        });
+
+        function onElementConverged() {
+            convergenceCount++;
+            if (convergenceCount === orbits.length) {
+                // All elements have converged, spin the button
+                button.classList.add('spin');
+            }
+        }
+
+        button.addEventListener('click', () => {
+            if (!isOrbiting) return; // Prevent multiple clicks
+            isOrbiting = false;
+
+            // Reset convergence counter
+            convergenceCount = 0;
+
+            // Stop orbiting and converge elements
+            document.querySelectorAll('.orbit-path').forEach(orbit => {
+                // Stop the orbit animation and maintain current position
+                const currentRotation = getComputedStyle(orbit).transform;
+                orbit.style.animation = 'none';
+                orbit.style.transform = currentRotation;
+
+                // Get the element inside
+                const element = orbit.querySelector('.orbital-element');
+
+                // Calculate current absolute position
+                const rect = element.getBoundingClientRect();
+
+                // Set absolute position
+                element.style.position = 'fixed';
+                element.style.left = `${rect.left}px`;
+                element.style.top = `${rect.top}px`;
+
+                // Move to button center and fade out
+                setTimeout(() => {
+                    element.style.left = '50%';
+                    element.style.top = '50%';
+                    element.style.transform = 'translate(-50%, -50%) scale(0)';
+                    element.style.opacity = '0';
+
+                    // Track convergence
+                    element.addEventListener('transitionend', onElementConverged, { once: true });
+                }, 50);
+            });
+        });
+
+        // Reset spin animation when it completes
+        button.addEventListener('animationend', () => {
+            button.classList.remove('spin');
+        });
+    </script>
+</body>
+
+</html>

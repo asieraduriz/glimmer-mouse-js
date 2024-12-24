@@ -1,0 +1,5 @@
+.glimmer-mouse-glow {
+  position: absolute;
+  pointer-events: none;
+  box-shadow: 0rem 0rem 2rem 1rem #b820ba;
+}
