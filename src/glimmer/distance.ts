@@ -1,6 +1,7 @@
-import { AnimationSelectionFactory, DurationSelectionFactory, ItemSelectionFactory } from "./factories/selection";
-import "./glimmer.css";
-import { AnimationDurationStrategy, ItemAnimationStrategy, ItemSelectionStrategy } from "./types";
+import { AnimationSelectionFactory, DurationSelectionFactory, ItemSelectionFactory } from "../factories/selection";
+import { Position } from "../types/position";
+import { GlimmerMouseDistance } from "../types/config";
+import { DistanceFactory } from "../factories/distance";
 
 const colouredHearts = ["red", "gold", "blue", "purple", "orange"].map(
   (color) =>
@@ -16,21 +17,12 @@ const animations: { [key: string]: string[] } = {
   falling: ["fall-1", "fall-2", "fall-3"],
 };
 
-type GlimmerMouseTime = {
-  type: "time";
-  throttleMs?: number;
-  preferredElementTag?: keyof HTMLElementTagNameMap;
-  itemSelection?: ItemSelectionStrategy;
-  animationDuration?: AnimationDurationStrategy;
-  animationSelection?: ItemAnimationStrategy;
-};
-
-type GlimmerMouseDistance = {
-  type: "distance";
-};
-
-export const glimmerMouse = ({
-  throttleMs = 150,
+export const glimmerMouseDistance = ({
+  delta = {
+    deltaX: 8,
+    deltaY: 9,
+    satisfy: "both",
+  },
   preferredElementTag = "span",
   animationDuration = {
     type: "fixed",
@@ -44,17 +36,17 @@ export const glimmerMouse = ({
     type: "sequential",
     animations: animations.falling,
   },
-}: GlimmerMouseTime) => {
-  let lastElementTime = 0;
+}: GlimmerMouseDistance) => {
+  let lastMousePosition: Position = { x: 0, y: 0 };
 
   const selectionStrategy = ItemSelectionFactory.create(itemSelection);
   const animationStrategy = AnimationSelectionFactory.create(animationSelection);
   const durationStrategy = DurationSelectionFactory.create(animationDuration);
 
-  const onGlimmerMouseMove = (mouseEvent: MouseEvent) => {
-    const now = Date.now();
+  const distanceStrategy = DistanceFactory.create(delta);
 
-    if (now - lastElementTime >= throttleMs) {
+  const onGlimmerMouseMove = (mouseEvent: MouseEvent) => {
+    if (distanceStrategy.isFurtherThanDelta(lastMousePosition, { x: mouseEvent.clientX, y: mouseEvent.clientY })) {
       const x = mouseEvent.clientX;
       const y = mouseEvent.clientY;
 
@@ -76,7 +68,7 @@ export const glimmerMouse = ({
         element.remove();
       }, durationStrategy.select());
 
-      lastElementTime = now;
+      lastMousePosition = { x, y };
     }
   };
 

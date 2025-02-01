@@ -1,6 +1,13 @@
-import { CustomDurationSelection, DurationStrategy, FixedDurationSelection, VariableDurationSelection } from "../strategies/duration";
-import { CustomSelection, RandomSelection, SelectionStrategy, SequentialSelection } from "../strategies/selection";
-import { AnimationDurationStrategy, ItemAnimationStrategy, ItemSelectionStrategy } from "../types";
+import {
+  CustomDurationSelection,
+  CustomSelection,
+  FixedDurationSelection,
+  RandomSelection,
+  SelectionStrategy,
+  SequentialSelection,
+  VariableDurationSelection,
+} from "../strategies/selection";
+import { AnimationDurationStrategy, ItemAnimationStrategy, ItemSelectionStrategy } from "../types/strategies";
 
 export class ItemSelectionFactory {
   static create(strategy: ItemSelectionStrategy): SelectionStrategy {
@@ -33,7 +40,7 @@ export class AnimationSelectionFactory {
 }
 
 export class DurationSelectionFactory {
-  static create(strategy: AnimationDurationStrategy): DurationStrategy {
+  static create(strategy: AnimationDurationStrategy): SelectionStrategy {
     switch (strategy.type) {
       case "fixed":
         return new FixedDurationSelection(strategy.durationMs);
