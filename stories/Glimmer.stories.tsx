@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
-import { fn } from "@storybook/test";
 
 import { glimmerMouse } from "../src/glimmer";
 
@@ -8,11 +7,10 @@ import { glimmerMouse } from "../src/glimmer";
 const meta = {
   title: "Example/Button",
   render: () => {
-    const { onGlimmerMouseMove } = glimmerMouse();
+    const { onGlimmerMouseMove } = glimmerMouse({ type: "time" });
 
     return (
       <div
-        className="glimmer-mouse-story"
         onMouseMove={(event) => {
           onGlimmerMouseMove(event.nativeEvent);
         }}
@@ -29,31 +27,3 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-// More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
-export const Primary: Story = {
-  args: {
-    primary: true,
-    label: "Button",
-  },
-};
-
-export const Secondary: Story = {
-  args: {
-    label: "Button",
-  },
-};
-
-export const Large: Story = {
-  args: {
-    size: "large",
-    label: "Button",
-  },
-};
-
-export const Small: Story = {
-  args: {
-    size: "small",
-    label: "Button",
-  },
-};

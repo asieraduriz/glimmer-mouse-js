@@ -5,7 +5,7 @@
   }
 
   5% {
-    transform: translate(10px, -10px) rotateX(45deg) rotateY(30deg) rotateZ(0deg) scale(1);
+    transform: translate(0px, 0px) rotateX(45deg) rotateY(30deg) rotateZ(0deg) scale(1);
     opacity: 1;
   }
 
@@ -46,33 +46,5 @@
   100% {
     transform: translate(20px, 120px) rotateX(-180deg) rotateY(-90deg) scale(0.5);
     opacity: 0;
-  }
-}
-
-@keyframes idle-1 {
-  0% {
-    transform: rotateX(0deg);
-  }
-  100% {
-    transform: rotateX(360deg);
-  }
-}
-
-@keyframes idle-2 {
-  0% {
-    transform: rotateY(0deg);
-  }
-  100% {
-    transform: rotateY(360deg);
-  }
-}
-
-@keyframes idle-3 {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
   }
 }
