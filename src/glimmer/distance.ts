@@ -46,9 +46,9 @@ export const glimmerMouseDistance = ({
   const distanceStrategy = DistanceFactory.create(delta);
 
   const onGlimmerMouseMove = (mouseEvent: MouseEvent) => {
-    if (distanceStrategy.isFurtherThanDelta(lastMousePosition, { x: mouseEvent.clientX, y: mouseEvent.clientY })) {
-      const x = mouseEvent.clientX;
-      const y = mouseEvent.clientY;
+    if (distanceStrategy.isFurtherThanDelta(lastMousePosition, { x: mouseEvent.pageX, y: mouseEvent.pageY })) {
+      const x = mouseEvent.pageX;
+      const y = mouseEvent.pageY;
 
       const element = document.createElement(preferredElementTag);
 

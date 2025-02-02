@@ -49,8 +49,8 @@ export const glimmerMouseTime = ({
     const now = Date.now();
 
     if (now - lastElementTime >= throttleMs) {
-      const x = mouseEvent.clientX;
-      const y = mouseEvent.clientY;
+      const x = mouseEvent.pageX;
+      const y = mouseEvent.pageY;
 
       const element = document.createElement(preferredElementTag);
 
