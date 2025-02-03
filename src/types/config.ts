@@ -2,11 +2,13 @@ import { AnimationDurationStrategy, ItemAnimationStrategy, ItemSelectionStrategy
 
 export type GlimmerMouseTime = {
   type: "time";
-  throttleMs?: number;
+  autoStart?: boolean;
+  elClassname?: string;
+  throttleMs: number;
   preferredElementTag?: keyof HTMLElementTagNameMap;
-  itemSelection?: ItemSelectionStrategy;
-  animationDuration?: AnimationDurationStrategy;
-  animationSelection?: ItemAnimationStrategy;
+  animationDuration: AnimationDurationStrategy;
+  animationSelection: ItemAnimationStrategy;
+  itemSelection: ItemSelectionStrategy & { className?: string };
 };
 
 export type XYDelta = { deltaX: number; deltaY: number; satisfy: "both" | "either" };
@@ -14,11 +16,19 @@ export type Delta = number | XYDelta;
 
 export type GlimmerMouseDistance = {
   type: "distance";
+  autoStart?: boolean;
+  elClassname?: string;
   delta: Delta;
   preferredElementTag?: keyof HTMLElementTagNameMap;
-  itemSelection?: ItemSelectionStrategy;
   animationDuration?: AnimationDurationStrategy;
   animationSelection?: ItemAnimationStrategy;
+  itemSelection?: ItemSelectionStrategy & { className?: string };
 };
 
-export type GlimmerMouseConfig = GlimmerMouseTime | GlimmerMouseDistance;
+export type GlimmerMouseFollow = {
+  type: "follow";
+  autoStart?: boolean;
+  elClassname: string;
+};
+
+export type GlimmerMouseConfig = GlimmerMouseTime | GlimmerMouseDistance | GlimmerMouseFollow;

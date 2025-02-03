@@ -23,6 +23,8 @@ export const glimmerMouseDistance = ({
     deltaY: 9,
     satisfy: "both",
   },
+  autoStart,
+  elClassname,
   preferredElementTag = "span",
   animationDuration = {
     type: "fixed",
@@ -45,7 +47,7 @@ export const glimmerMouseDistance = ({
 
   const distanceStrategy = DistanceFactory.create(delta);
 
-  const onGlimmerMouseMove = (mouseEvent: MouseEvent) => {
+  const onMouseMove = (mouseEvent: MouseEvent) => {
     if (distanceStrategy.isFurtherThanDelta(lastMousePosition, { x: mouseEvent.pageX, y: mouseEvent.pageY })) {
       const x = mouseEvent.pageX;
       const y = mouseEvent.pageY;
@@ -72,7 +74,30 @@ export const glimmerMouseDistance = ({
     }
   };
 
+  let hasStarted = false;
+  const start = () => {
+    if (hasStarted) return;
+    const el = document.querySelector<HTMLElement>(elClassname ?? "");
+
+    hasStarted = true;
+    el?.addEventListener("mousemove", onMouseMove);
+  };
+
+  const stop = () => {
+    if (!hasStarted) return;
+    const el = document.querySelector<HTMLElement>(elClassname ?? "");
+
+    hasStarted = false;
+    el?.removeEventListener("mousemove", onMouseMove);
+  };
+
+  if (autoStart) {
+    start();
+  }
+
   return {
-    onGlimmerMouseMove,
+    onMouseMove,
+    start,
+    stop,
   };
 };
