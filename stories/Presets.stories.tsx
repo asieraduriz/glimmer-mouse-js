@@ -1,17 +1,24 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 
-import glimmerMouse from "../src";
-import "../src/glimmer.css";
-import { GlimmerMouseConfig, GlimmerMouseFollow } from "../src/types/config";
+import "../src/presets/preset.css";
+import { distancePreset, timePreset } from "../src/presets";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: "GlimmerMouse/Follow",
+  title: "GlimmerMouse/Presets",
   render: (args) => {
-    glimmerMouse(args as GlimmerMouseConfig);
+    const { onMouseMove } = args.preset === "time" ? timePreset() : distancePreset();
 
-    return <div className="glimmer-mouse-story" style={{ height: "1500px", width: "50dvw", backgroundColor: "orange" }}></div>;
+    return (
+      <div
+        className="glimmer-mouse-story"
+        onMouseMove={(event) => {
+          onMouseMove(event.nativeEvent);
+        }}
+        style={{ height: "30dvh", width: "50dvw", backgroundColor: "orange" }}
+      ></div>
+    );
   },
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
@@ -23,13 +30,14 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const animations: { [key: string]: string[] } = {
-  falling: ["fall-1", "fall-2", "fall-3"],
+export const DistancePreset: Story = {
+  args: {
+    preset: "distance",
+  },
 };
 
-export const Default: Story = {
+export const TimePreset: Story = {
   args: {
-    type: "follow",
-    elClassname: "glimmer-mouse-story",
-  } satisfies GlimmerMouseFollow,
+    preset: "time",
+  },
 };

@@ -2,7 +2,7 @@
   "name": "glimmer-mouse-js",
   "description": "A small library to power-up mouse movements in web pages",
   "private": false,
-  "version": "1.0.0",
+  "version": "0.0.1",
   "type": "module",
   "files": [
     "dist"

@@ -3,7 +3,6 @@ import { GlimmerMouseTime } from "../types/config";
 
 export const glimmerMouseTime = ({
   throttleMs,
-  autoStart,
   elClassname,
   preferredElementTag = "span",
   animationDuration,
@@ -16,10 +15,13 @@ export const glimmerMouseTime = ({
   const animationStrategy = AnimationSelectionFactory.create(animationSelection);
   const durationStrategy = DurationSelectionFactory.create(animationDuration);
 
+  let hasStarted = false;
+
   const onMouseMove = (mouseEvent: MouseEvent) => {
     const now = Date.now();
 
     if (now - lastElementTime >= throttleMs) {
+      hasStarted = true;
       const { pageX, pageY } = mouseEvent;
 
       const element = document.createElement(preferredElementTag);
@@ -45,7 +47,6 @@ export const glimmerMouseTime = ({
     }
   };
 
-  let hasStarted = false;
   const start = () => {
     if (hasStarted) return;
     const el = document.querySelector<HTMLElement>(elClassname ?? "");
@@ -61,10 +62,6 @@ export const glimmerMouseTime = ({
     hasStarted = false;
     el?.removeEventListener("mousemove", onMouseMove);
   };
-
-  if (autoStart) {
-    start();
-  }
 
   return {
     onMouseMove,
